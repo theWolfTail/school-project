@@ -1,0 +1,81 @@
+#include<iostream>
+using namespace std;
+typedef struct{
+	int vexnum, arcnum;
+	int vexs[50];
+	int arcs[50][50];
+}Graph;
+//确定顶点在图中的位置
+int LocateVex(Graph G, int v)
+{
+	int t = 0;
+	for (int i = 1; i <= G.vexnum; i++)
+	{
+		if (v == G.vexs[i])  return i;
+	}
+
+}
+//创建辅助数组
+int visited[50];
+//采用邻接矩阵表示图的深度优先遍历
+void DFS(Graph G, int v)
+{
+
+	cout << G.vexs[v] << " "; visited[v] = 1;
+	for (int i = 1; i <= G.vexnum; i++)
+	{
+		if ((G.arcs[v][i] != 0) && (visited[i] == 0))
+			DFS(G, i);
+
+	}
+
+}
+int Create(Graph &G)
+{
+	int i, k, j;
+	int v1, v2, w;
+	cout << "请输入总顶点数和边数" << endl;
+	cin >> G.vexnum >> G.arcnum;
+	cout << "输入顶点的值" << endl;
+	for (i = 1; i <= G.vexnum; i++)
+		visited[i] = 0;
+	for (i = 1; i <= G.vexnum; i++)
+	{
+		cin >> G.vexs[i];
+	}
+	//初始化邻接矩阵
+	for (i = 1; i <= G.vexnum; i++)
+	for (j = 1; j <= G.vexnum; j++)
+	{
+		G.arcs[i][j] = 0;
+	}
+	//构造邻接矩阵
+	for (k = 1; k <= G.arcnum; k++)
+	{
+		cout << "输入一条边上的两个顶点及其权值" << endl;
+		cin >> v1 >> v2 >> w;
+		i = LocateVex(G, v1); j = LocateVex(G, v2);
+		G.arcs[i][j] = w;
+		G.arcs[j][i] = G.arcs[i][j];
+		//cout << i << j << G.arcs[i][j] << endl;
+	}
+	//输出连通分量
+	for (int k = 1; k <= G.vexnum; k++)
+	if (visited[k] == 0) {
+		cout << "连通分量" << endl;
+
+		DFS(G, k);
+
+		cout << endl << endl;
+	}
+	return 0;
+}
+
+
+int main()
+{
+	Graph G;
+	Create(G);
+	return 0;
+
+}

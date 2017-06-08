@@ -1,0 +1,52 @@
+#include <iostream>
+using namespace std;
+//创建栈
+typedef struct stack
+{
+	int data;
+	stack *next;
+}stack, *linkstack;
+
+//初始化栈
+
+bool Initstack(linkstack &L)
+{
+	L = new stack;
+	L->next = NULL;
+	cout << "初始化栈成功" << endl;
+	return 1;
+
+}
+
+//入栈
+bool Insertstack(linkstack &L, int e)
+{
+	linkstack p;
+	p = new stack;
+	p->next = L->next;
+	p->data = e;
+	L->next = p;
+	cout << "入栈成功" << endl;
+	return 1;
+
+}
+
+//出栈
+bool outstack(linkstack &L)
+{
+	linkstack p;
+	p = new  stack;
+	p = L->next;
+	L->next = p->next;
+	p->next = NULL;
+	cout << "出栈成功" << endl;
+	return 1;
+}
+int main()
+{
+	linkstack L;
+	Initstack(L);
+	Insertstack(L, 2);
+	outstack(L);
+	return 0;
+}

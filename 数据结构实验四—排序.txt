@@ -1,0 +1,61 @@
+#include <iostream>
+using namespace std;
+#define MaxNum 100
+
+int k, low, high, total, a[MaxNum];
+
+void BinInsertSort(int ar[]){
+
+	for (k = 2; k <= total; k++) {
+		a[0] = a[k];
+		low = 1; high = k - 1;
+
+		while (low <= high){
+			int mid = (low + high) / 2;
+			if (a[0]<a[mid]) high = mid - 1;
+			else low = mid + 1;
+		}
+
+		for (int i = k - 1; i >= low; i--) a[i + 1] = a[i];
+		a[low] = a[0];
+	}
+
+}
+void Search(int n)
+{
+	for (int i = 1; i <= total; i++)
+	{
+		if (a[i] == n)  cout << i <<" "<<a[i]<< endl;
+	}
+}
+void main(){
+	int i;
+	int sum,n;
+	cout << "input the total of numbers to be sorted" << endl;
+	cin >> total; cout << "input the numbers" << endl;
+
+	for (i = 1; i <= total; i++) cin >> a[i];
+	//调用函数，是该表按照从小到大顺序排序
+	BinInsertSort(a);
+	sum = 0;
+	for (i = 1; i <= total; i++)
+	{	//按从小到大输出表中数据
+		cout << a[i] << " ";
+		//计算总和
+		sum = a[i] + sum;
+	}
+	cout << endl;
+	//输出最小值
+	cout << "输出最小值" << endl;
+	cout << a[1] << endl;
+	//输出最大值
+	cout << "输出最大值" << endl;
+	cout << a[total] << endl;
+	//输出总和与平均数
+	cout << "输出总和与平均数" << endl;
+	cout <<sum<<" "<<sum / total;
+	cout << endl;
+	cout << "请输入要查找的值" << endl;
+	cin >> n;
+	Search(n);
+}

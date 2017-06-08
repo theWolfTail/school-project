@@ -1,0 +1,103 @@
+#include <iostream>
+using namespace std;
+
+//创建二叉树
+typedef struct tree
+{
+	char data;
+	tree *right;
+	tree *left;
+}tree, *linktree;
+//初始化二叉树
+bool Inittree(linktree &T)
+{
+	T = new tree;
+	T->right = NULL;
+	T->left = NULL;
+	return 1;
+}
+
+
+//用数组获取输入数据
+bool Getdata(char &a)
+{
+	cout<<"请输入二叉树数据"<<endl;
+	for(int i = 0; i<a.length; i++)
+	{
+		cin<<a[i];
+	}
+	return 1;
+}
+
+
+
+//判断并插入二叉树
+bool Inserttree(linktree &T, char &a)
+{
+	//用sum来表示深度
+	static int sum = 0;
+	int i = a.length;
+	if(a[i] == ')' || a[i] == '(')
+	{
+		cout<<"输入错误"<<endl;
+		return 0;
+	}
+	else
+		T->data = a[i];
+	if(a[i-2] == ')')
+	{
+		if(a[i-4] == ')')
+		{
+			T->left = NULL;
+			T->right = NULL;
+			//输出每一层的根节点
+			cout<<a[i]<<endl;
+		}
+		else
+		{
+			T->right = NULL;
+			T = T->left;
+			a = a-4;
+			//输出遍历到的数据
+			cout<<a[i-4]<<endl;
+			sum++;
+			Inserttree(T, a);
+		}
+	}
+	else
+	{
+		if(a[i-4] == ')')
+		{
+			T->left = NULL;
+			T = T->right;
+			a = a-2;
+			cout<<a[i-2]<<endl;
+			sum++;
+			Inserttree(T, a);
+		}
+		else
+		{
+			linktree p;
+			p = new tree;
+			p = T;
+			char *b;
+			b = a;
+			T = T->left;
+			a = a-4;
+			cout<<a[i-4]<<endl;
+			Inserttree(T, a);
+			p = p->right;
+			b = b-2;
+			cout<<b[i-2]<<endl;
+			sum++;
+			Inserttree(p, b);
+			
+		}
+	}
+}
+
+int main()
+{
+	
+	return 0;
+}

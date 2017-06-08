@@ -1,0 +1,88 @@
+#include <iostream>
+using namespace std;
+
+//创建节点
+typedef struct node
+{
+	int data;
+	node *next;
+}node, *linknode;
+
+//创建队列
+typedef struct line
+{
+	linknode front;
+	linknode rear;
+}line, *linkline;
+
+//队列的初始化
+bool Initline(linkline &L)
+{
+	L = new line;
+	L->front = new node;
+	L->rear = new node;
+	L->front->next = L->rear;
+	L->rear->next = NULL;
+	cout << "初始化成功" << endl;
+	return 0;
+}
+
+
+//入列
+bool Insertline(linkline &L, int e)
+{
+	linknode p;
+	p = new node;
+	p->data = e;
+	p->next = L->front->next;
+	L->front->next = p;
+	cout << "入队成功" << endl;
+	return 1;
+}
+
+//出列
+
+void Outline(linkline &L)
+{
+	if (L->front->next == L->rear)
+	{
+		cout << "栈为空，不能出栈" << endl;
+	}
+	else
+	{
+		linknode p;
+		p = new node;
+		p = L->front->next;
+		if (p->next != L->rear)
+		{
+			while (p->next->next != L->rear)
+			{
+				p = p->next;
+			}
+			p->next = L->rear;
+			p->next->next = NULL;
+		}
+		else
+		{
+			L->front->next = L->rear;
+			p->next = NULL;
+		}
+		cout << "出队成功" << endl;
+	}
+	
+}
+
+int main()
+{
+
+	linkline L;
+	Initline(L);
+	Insertline(L, 2);
+	Insertline(L, 3);
+	Insertline(L, 3);
+	Outline(L);
+	Outline(L);
+	Outline(L);
+	Outline(L);
+	return 0;
+}
