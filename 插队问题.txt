@@ -1,0 +1,153 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+			
+//创建人物类
+typedef struct person
+{
+	string name;
+	int n = 0;				//有关系的人数
+	person *r;				//指向与自己有关系的人
+	person *b;				//排在后面的人
+}person, *linkperson;
+typedef struct queue
+{
+	person *p;							//队列的排头
+	int np;								//队列中的人数
+	int num;							//队列的序号
+	
+}queue, *linkqueue;
+//person *P;		//队列的头节点
+//person *P1;	//人物关系的头结点
+person *P = new person;
+person *P1 = new person;
+void initP(linkperson &P)
+{
+	P = new person;
+	P->b = NULL;
+	P->r = NULL;
+}
+void initR(linkperson &p)
+	{
+		person  *t;
+		person *p1;
+		t = new person;
+		p1 = new person;
+		
+		string na;
+		t->r = p->r;
+		cout << "请输入朋友的名字：";
+		cin >> na;
+		p1->name = na;
+
+		//前插法
+		p->r = p1;
+		p1->r = t->r;
+	}
+linkqueue initQ(linkqueue &q, int nu)			//创建时的参数列为队列,队列的排头和队列序号
+{
+	q = new queue;
+	q->num = nu+1;
+	q->p = new person;
+	initP(q->p);
+	P->b = NULL;	//头结点指为空
+	int n;          //队列人数
+	string name;	//队列中插入的名字
+	person *t;		//作为间接指针
+	t = new person;
+	cout << "请输入队列的人数:";
+	cin >> n;
+	q->np = n;
+	for (int i = 0; i < n; i++)
+	{
+
+		cout << "插入姓名：";
+		cin >> name;
+		q->p->name = name;
+
+
+		//后插法
+		t = P;
+		for (; t->b != NULL;)
+		{
+			t = t->b;
+		}
+		t->b = q->p;
+	}
+	return q;
+}
+int insertNewPerson(linkqueue &q, linkperson &p)
+	{
+	
+		P->b = q->p;			//队列的头指针
+		P1->r = p->r;				//人物关系的指针
+		for (int i = 0; i < q->np; i++)
+		{
+			for (int j = 0; j < p->n; j++)
+			{
+				if (P->b->name == P1->r->name)
+				{
+					//插到这个人的后面
+					person *t;
+					t = new person;
+					t->b = P->b->b;
+					P->b->b = p;
+					p->b = t->b;
+					return i+1;
+				}
+				else
+				{
+					P1->r = P1->r->r;
+				}
+			}
+			P->b = P->b->b;
+		}
+		return q->np + 1;
+	}
+
+
+int main()
+{
+	linkperson P;
+	initP(P);
+	int n;
+	cout << "请输入朋友的人数：";
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		initR(P);							//创建新人
+	}
+
+	cout << "请输入队列的个数：";
+	cin >> n;
+	linkqueue Q;
+	Q = new queue;
+	queue* a = (queue*)malloc(sizeof(queue) * n);
+	for (int i = 0; i < n;i++)
+	{
+		linkqueue q;						
+		initQ(q,i);						//创建队列
+		Q[i] = *q;
+		
+	}
+	int *m = new int[n];
+	int max = 0;
+	int l = 0;
+	for(int i = 0;i<n; i++)
+	{
+		linkqueue q;
+		q = new queue;
+		*q = Q[i];
+		m[i] = insertNewPerson(q,P);
+		if (m[i] > max)
+		{
+			max = m[i];
+			l = i+1;
+		}
+
+	}
+	cout << "新人插入到了第" <<l<<"列中的第"<<max<<"个位置"<< endl;
+
+	return 0;
+}
